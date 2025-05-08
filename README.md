@@ -61,7 +61,7 @@ health_info_system/
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/<your-username>/health_info_system.git
+git clone https://github.com/njange/health_info_system.git
 cd health_info_system
 ```
 
@@ -119,22 +119,6 @@ You can customize secrets and deployment targets in your repo's **GitHub > Setti
 
 ---
 
-### 📦 Database Seeding (Optional)
-
-You can populate the database with sample records:
-
-```bash
-docker-compose exec web python manage.py populate_db
-```
-
-Or dump/load fixtures:
-
-```bash
-python manage.py dumpdata core.ModelName > core/fixtures/ModelName.json
-python manage.py loaddata core/fixtures/ModelName.json
-```
-
----
 
 ## 📁 Environment Variables (`.env`)
 
