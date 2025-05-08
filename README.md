@@ -1,145 +1,180 @@
-Health Information System — API Documentation & Feature Report
-📌 Project Overview
-This Health Information System is a secure and scalable Django-based application designed to enable medical professionals (e.g., doctors) to manage health programs and client enrollments. It features a RESTful API for easy integration with external systems and supports JWT-based authentication for access control.
 
-🚀 Features
-✅ 1. Create a Health Program
-Doctors can create and manage various health programs such as:
+# 🏥 Health Information System
 
-HIV
+A modern web-based **Health Information System** built with **Django** and **PostgreSQL**, containerized using **Docker**, and deployed via **GitHub Actions**. This system provides a scalable backend infrastructure to manage patient records, appointments, and healthcare-related data.
 
-Malaria
+---
 
-Tuberculosis
+## 📂 Project Structure
 
-Endpoint:
-POST /api/programs/
-Authentication: Required
+```
+health_info_system/
+├── .github/workflows/       # GitHub Actions CI/CD workflows
+├── app/                     # Django project folder
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── core/                    # Your main application logic
+│   ├── migrations/
+│   ├── models.py
+│   ├── views.py
+│   ├── admin.py
+│   └── ...
+├── manage.py                # Django CLI entry point
+├── Dockerfile               # Docker image definition
+├── docker-compose.yml       # Docker multi-container setup
+├── requirements.txt         # Python dependencies
+├── .env                     # Environment variables (excluded in .gitignore)
+└── README.md                # You're reading it 😄
+```
 
-✅ 2. Register a New Client
-Doctors can register clients by capturing:
+---
 
-Full name
+## 🛠️ Tech Stack
 
-Age
+| Layer               | Technology              |
+|---------------------|-------------------------|
+| **Framework**       | Django 4+               |
+| **Database**        | PostgreSQL 14+          |
+| **DevOps**          | Docker, GitHub Actions  |
+| **Deployment**      | CI/CD Pipeline (GitHub) |
+| **Language**        | Python 3.10             |
+| **OS**              | Ubuntu (Docker-based)   |
 
-Contact information
+---
 
-Endpoint:
-POST /api/clients/
-Authentication: Required
+## 🚀 Setup Instructions
 
-✅ 3. Enroll a Client in One or More Programs
-Clients can be enrolled in multiple health programs dynamically.
+### ✅ Prerequisites
 
-Endpoint:
-POST /api/clients/{id}/enroll/
-Body:
+- Python 3.10+
+- Docker + Docker Compose
+- GitHub Account for Actions
+- PostgreSQL 14+ (if running outside Docker)
 
-json
-Copy
-Edit
-{
-  "program_ids": [1, 2]
-}
-Authentication: Required
+---
 
-✅ 4. Search for Clients by Name
-Quick search capability to locate clients using partial or full names.
+### 🧪 Local Development
 
-Endpoint:
-GET /api/clients/search/?name=Jane
-Authentication: Required
+1. **Clone the repository:**
 
-✅ 5. View Client Profile with Programs
-Doctors can view a detailed profile of a specific client, including all enrolled health programs.
+```bash
+git clone https://github.com/<your-username>/health_info_system.git
+cd health_info_system
+```
 
-Endpoint:
-GET /api/clients/{id}/
-Authentication: Required
+2. **Copy environment variables:**
 
-✅ 6. Expose Client Profile via REST API
-All features are accessible via a RESTful API and secured with JWT tokens.
+```bash
+cp .env.example .env
+# Edit .env to match your local DB credentials
+```
 
-API Base:
-http://127.0.0.1:8000/api/
+3. **Build and run using Docker Compose:**
 
-🔐 7. JWT-Based Security
-Secure login and token-based session handling for API consumers (doctors/admins).
+```bash
+docker-compose up --build
+```
 
-Obtain Token
-POST /api/token/
-Body:
+4. **Run migrations:**
 
-json
-Copy
-Edit
-{
-  "username": "njange",
-  "password": "4044"
-}
-Use Bearer Token
-Include the token in request headers:
+```bash
+docker-compose exec web python manage.py migrate
+```
 
-makefile
-Copy
-Edit
-Authorization: Bearer <access_token>
-🛠️ Technology Stack
+5. **Create superuser:**
 
-Layer	Tech
-Backend	Django (v4+)
-API Framework	Django REST Framework
-Auth	JWT (SimpleJWT)
-Database	PostgreSQL
-Docs/Test	Postman + DRF Browsable UI
-📁 Project Structure
-graphql
-Copy
-Edit
-health_system/
-├── core/
-│   ├── models.py         # Client & Program models
-│   ├── serializers.py    # API serializers
-│   ├── views.py          # API views with permissions
-│   ├── urls.py           # App URL routes
-├── health_system/
-│   ├── settings.py       # Project settings
-│   ├── urls.py           # Global URL routes
-🧪 API Testing Instructions
-Start Server
+```bash
+docker-compose exec web python manage.py createsuperuser
+```
 
-bash
-Copy
-Edit
-python manage.py runserver
-Authenticate with JWT
+6. **Access the app:**
 
-http
-Copy
-Edit
-POST /api/token/
-Add Token in Postman Headers
+- App: [http://localhost:8000](http://localhost:8000)
+- Admin: [http://localhost:8000/admin](http://localhost:8000/admin)
 
-makefile
-Copy
-Edit
-Authorization: Bearer <access_token>
-Use the following endpoints to:
+---
 
-GET/POST /api/clients/
+### 🧪 Running Tests
 
-GET/POST /api/programs/
+```bash
+docker-compose exec web python manage.py test
+```
 
-POST /api/clients/{id}/enroll/
+---
 
-GET /api/clients/search/?name=...
+### ⚙️ GitHub Actions (CI/CD)
 
-GET /api/clients/{id}/
+This project uses **GitHub Actions** to:
 
-🔐 Security Considerations
-JWT ensures only authenticated users can access or modify records.
+- Install dependencies
+- Run tests and migrations
+- Deploy the application
 
-No sensitive data is exposed in public APIs.
+> The workflow YAML file is located at `.github/workflows/deploy.yml`.
 
-Future enhancements could include audit logs and field-level encryption.
+You can customize secrets and deployment targets in your repo's **GitHub > Settings > Secrets and variables**.
+
+---
+
+### 📦 Database Seeding (Optional)
+
+You can populate the database with sample records:
+
+```bash
+docker-compose exec web python manage.py populate_db
+```
+
+Or dump/load fixtures:
+
+```bash
+python manage.py dumpdata core.ModelName > core/fixtures/ModelName.json
+python manage.py loaddata core/fixtures/ModelName.json
+```
+
+---
+
+## 📁 Environment Variables (`.env`)
+
+| Variable Name        | Description                        |
+|----------------------|------------------------------------|
+| `DEBUG`              | Enable/disable debug mode          |
+| `SECRET_KEY`         | Django secret key                  |
+| `POSTGRES_DB`        | Database name                      |
+| `POSTGRES_USER`      | PostgreSQL username                |
+| `POSTGRES_PASSWORD`  | PostgreSQL password                |
+| `POSTGRES_HOST`      | DB host (e.g., `db`)               |
+| `POSTGRES_PORT`      | Port (default: 5432)               |
+
+---
+
+## 👥 Contributing
+
+1. Fork the repo
+2. Create your feature branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m 'Add new feature'`
+4. Push to the branch: `git push origin feature/my-feature`
+5. Open a Pull Request
+
+---
+
+## 🔒 Security
+
+- All secrets are stored securely via GitHub Secrets.
+- PostgreSQL is isolated via Docker network.
+- Debug is turned off in production.
+- Django security best practices followed (e.g., `ALLOWED_HOSTS`, HTTPS settings).
+
+---
+
+## 📚 License
+
+MIT License © 2025 [Your Name or Org]
+
+---
+
+## 🙋‍♂️ Need Help?
+
+If you have questions, feel free to open an [issue](https://github.com/njange/health_info_system/issues) or contact the maintainer.
