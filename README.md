@@ -155,7 +155,7 @@ You can customize secrets and deployment targets in your repo's **GitHub > Setti
 
 ## 📚 License
 
-MIT License © 2025 [Your Name or Org]
+MIT License © 2025 Njange
 
 ---
 
