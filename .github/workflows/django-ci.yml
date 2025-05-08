@@ -46,17 +46,12 @@ jobs:
 
     - name: Install dependencies
       run: |
-          health_info_system  # Enter the project folder
-          pip install -r requirements.txt
-
+            pip install -r requirements.txt
+      
     - name: Run migrations
       run: |
-          health_info_system  # Enter the project folder
-          python manage.py migrate
-
+            python manage.py migrate
+      
     - name: Run tests
       run: |
-          health_info_system  # Enter the project folder
-          python manage.py test
-
-        
+            python manage.py test
