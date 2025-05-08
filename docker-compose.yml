@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+    container_name: health_info_system_web
+    command: gunicorn health_system.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DEBUG=True
+      - DJANGO_SETTINGS_MODULE=health_system.settings
+      - DATABASE_URL=postgres://postgres:password@db:5432/health_db
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
+
+  db:
+    image: postgres:14
+    container_name: health_info_system_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: health_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
