@@ -49,9 +49,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run Django tests
-      working-directory: health_info_system
+    - name: Run migrations and tests
       run: |
-        python manage.py migrate
-        python manage.py test
+          python manage.py migrate
+          python manage.py test
+      working-directory: ./health_info_system
         
