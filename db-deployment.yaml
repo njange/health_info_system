@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-info-db
+  labels:
+    app: health-info
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: health-info
+      tier: database
+  template:
+    metadata:
+      labels:
+        app: health-info
+        tier: database
+    spec:
+      containers:
+      - name: db
+        image: postgres:14
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "password"
+        - name: POSTGRES_DB
+          value: "health_db"
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-data
+        emptyDir: {}
