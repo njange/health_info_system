@@ -30,7 +30,7 @@ health_info_system/
 │   ├── urls.py
 │   ├── wsgi.py
 │   └── asgi.py
-├── core/                    # Your main application logic
+├── core/                    # Main application logic
 │   ├── migrations/
 │   ├── models.py
 │   ├── views.py
